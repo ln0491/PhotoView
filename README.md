@@ -2,18 +2,18 @@
 ## 效果
 ### 多选显示相机
 
-![image](https://github.com/ln0491/PhotoView/muchooseshowcamra.gif)
+![image](https://github.com/ln0491/PhotoView/edit/master/muchooseshowcamra.gif)
 
 ### 多选不显示相机
-![image](https://github.com/ln0491/PhotoView/muchoosenoshowcamra.gif)
+![image](https://github.com/ln0491/PhotoView/edit/master/muchoosenoshowcamra.gif)
 
 ### 单选显示相机
 
-![image](https://github.com/ln0491/PhotoView/siglenoshowcamra.gif)
+![image](https://github.com/ln0491/PhotoView/edit/master/siglenoshowcamra.gif)
 
 ### 单选不显示相机
 
-![image](https://github.com/ln0491/PhotoView/sigleshowcamra.gif)
+![image](https://github.com/ln0491/PhotoView/edit/master/sigleshowcamra.gif)
 
 
 
