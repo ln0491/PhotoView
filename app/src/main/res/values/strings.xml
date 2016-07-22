@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PhotoView</string>
+    <string name="msg_no_camera">没有找到摄像头</string>
+</resources>
