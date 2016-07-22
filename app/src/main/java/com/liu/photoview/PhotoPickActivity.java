@@ -1,16 +1,22 @@
 package com.liu.photoview;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,8 +42,9 @@ import java.util.List;
 
 public class PhotoPickActivity extends AppCompatActivity implements PhotoAdapter.OnItemClickListener, View.OnClickListener, PopuListImage.OnPopuWindowItemClickListen {
 
-    private static final int    REQUEST_CAMERA = 1;
-    private static final String KEY_RESULT     = "phote_select_result";
+    private static final int    REQUEST_CAMERA    = 1;
+    private static final String KEY_RESULT        = "phote_select_result";
+    private static final int REQUEST_READ_EXSTORE = 2;
     //ListView
     private RecyclerView   mPhotoListView;
     //底部容器
@@ -85,7 +92,65 @@ public class PhotoPickActivity extends AppCompatActivity implements PhotoAdapter
 
         }
     };
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initView();
 
+        initListener();
+        checkReadExStorePermission();
+    }
+
+    private void checkReadExStorePermission() {
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(PhotoPickActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(PhotoPickActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_READ_EXSTORE);
+                return;
+            }else{
+                //读取相册
+                initData();
+            }
+        } else {
+            // //读取相册
+            initData();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_READ_EXSTORE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    initData();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(PhotoPickActivity.this, "读取外部存储卡功能被拒绝", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case REQUEST_CAMERA:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                   showCamera();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(PhotoPickActivity.this, "相机功能权限被拒绝", Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+                break;
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+
+    }
 
     /**
      * 初始化PopupWindow
@@ -150,14 +215,7 @@ public class PhotoPickActivity extends AppCompatActivity implements PhotoAdapter
         mPhotoAdapter.setmOnItemClickListener(this);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
-        initData();
-        initListener();
-    }
+
 
 
     private void initView() {
@@ -286,7 +344,8 @@ public class PhotoPickActivity extends AppCompatActivity implements PhotoAdapter
 
 
         if (position == 0 && mPhotoAdapter.getIsShowCamera()) {
-            showCamera();
+            //验证权限
+            checkCamraPermissions();
             return;
         }
 
@@ -335,6 +394,8 @@ public class PhotoPickActivity extends AppCompatActivity implements PhotoAdapter
      * 显示相机
      */
     private void showCamera() {
+
+
         // 跳转到系统照相机
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
@@ -347,6 +408,23 @@ public class PhotoPickActivity extends AppCompatActivity implements PhotoAdapter
             Toast.makeText(getApplicationContext(), R.string.msg_no_camera, Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void checkCamraPermissions() {
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(PhotoPickActivity.this,Manifest.permission.CAMERA);
+            if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(PhotoPickActivity.this,new String[]{Manifest.permission.CAMERA},REQUEST_CAMERA);
+                return;
+            }else{
+                //
+                showCamera();
+            }
+        } else {
+            //上面已经写好的拨号方法
+            showCamera();
+        }
     }
 
     @Override
