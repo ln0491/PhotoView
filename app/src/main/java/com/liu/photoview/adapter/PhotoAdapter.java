@@ -32,12 +32,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     /**
     是否显示相机，默认显示
      */
-    private boolean mIsShowCAMERA =true;
+    private boolean mIsShowCAMERA =false;
 
     /**
      * 是否为单选，默认为多选
      */
-    private boolean mIsRadio=false;
+    private boolean mIsRadio=true;
     /**
      * 选中的照片保存在集合里，单选与多选共用，在点击是判断是单选还是多选
      */
