@@ -9,11 +9,12 @@
 
 ### 单选显示相机
 
-![image](siglenoshowcamra.gif)
+![image](sigleshowcamra.gif)
 
 ### 单选不显示相机
 
-![image](sigleshowcamra.gif)
+![image](siglenoshowcamra.gif)
+
 
 
 
