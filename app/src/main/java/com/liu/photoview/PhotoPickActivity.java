@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements PhotoAdapter.OnItemClickListener, View.OnClickListener, PopuListImage.OnPopuWindowItemClickListen {
+public class PhotoPickActivity extends AppCompatActivity implements PhotoAdapter.OnItemClickListener, View.OnClickListener, PopuListImage.OnPopuWindowItemClickListen {
 
     private static final int    REQUEST_CAMERA = 1;
     private static final String KEY_RESULT     = "phote_select_result";
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements PhotoAdapter.OnIt
      * 初始化PopupWindow
      */
     private void initPopupWindow() {
-        mPopuListImage = new PopuListImage(MainActivity.this, mPhotoFolders);
+        mPopuListImage = new PopuListImage(PhotoPickActivity.this, mPhotoFolders);
 
         mPopuListImage.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements PhotoAdapter.OnIt
         }
 
         mPhotoAdapter = new PhotoAdapter(this, photoLists, dirPath);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(PhotoPickActivity.this, 3);
         mPhotoListView.setLayoutManager(gridLayoutManager);
         mPhotoListView.setAdapter(mPhotoAdapter);
         mPhotoAdapter.setmOnItemClickListener(this);
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements PhotoAdapter.OnIt
                 //获取URI
                 Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-                ContentResolver contentResolver = MainActivity.this.getContentResolver();
+                ContentResolver contentResolver = PhotoPickActivity.this.getContentResolver();
 
                 Cursor cursor = contentResolver.query(uri, null,//查询URI，所有列
                         MediaStore.Images.Media.MIME_TYPE + " = ? or " + MediaStore.Images.Media.MIME_TYPE + " = ?", //过滤条件 只查jpg,png
